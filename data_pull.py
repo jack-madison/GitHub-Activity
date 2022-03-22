@@ -5,7 +5,7 @@ import gzip
 import json
 import ast
 
-url = 'https://data.gharchive.org/2015-01-01-15.json.gz'
+url = 'https://data.gharchive.org/2021-01-01-15.json.gz'
 
 r = requests.get(url)
 
@@ -13,10 +13,13 @@ content = gzip.decompress(r.content).decode('utf-8')
 
 dump = json.dumps(content)
 
-data = json.loads(content)
+res = ast.literal_eval(dump)
 
-text_file = open("./data.txt", "w")
-text_file.write(dump)
-text_file.close()
+res = res.replace(":false", ":False")
+res = res.replace(":true", ":True")
 
-df = pd.DataFrame(data)
+
+
+dict = json.loads(res)
+
+df = pd.DataFrame(res)
